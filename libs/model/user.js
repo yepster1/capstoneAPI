@@ -1,27 +1,31 @@
 var mongoose = require('mongoose'),
-	crypto = require('crypto'),
+crypto = require('crypto'),
 
-	Schema = mongoose.Schema,
+Schema = mongoose.Schema,
 
-	User = new Schema({
-		username: {
-			type: String,
-			unique: true,
-			required: true
-		},
-		hashedPassword: {
-			type: String,
-			required: true
-		},
-		salt: {
-			type: String,
-			required: true
-		},
-		created: {
-			type: Date,
-			default: Date.now
-		}
-	});
+User = new Schema({
+	username: {
+		type: String,
+		unique: true,
+		required: true
+	},
+	hashedPassword: {
+		type: String,
+		required: true
+	},
+	salt: {
+		type: String,
+		required: true
+	},
+	rating: {
+		type: Number,
+		default: 1200
+	},
+	created: {
+		type: Date,
+		default: Date.now
+	}
+});
 
 User.methods.encryptPassword = function(password) {
 	return crypto.createHmac('sha1', this.salt).update(password).digest('hex');

@@ -9,6 +9,46 @@ var db = require(libs + 'db/mongoose');
 
 var User = require(libs + 'model/user');
 
+router.put('/changeRating', function (req, res){
+    var userId = req.params.id;
+
+    User.findById(userId, function (err, user) {
+        if(!user) {
+            res.statusCode = 404;
+            log.error('user with id: %s Not Found', gameId);
+            return res.json({ 
+                error: 'Not found' 
+            });
+        }
+
+        user.rating = req.params.rating;
+        
+        game.save(function (err) {
+            if (!err) {
+                log.info("user rating with id: %s updated", game.id);
+                return res.json({ 
+                    status: 'OK', 
+                    game:game 
+                });
+            } else {
+                if(err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({ 
+                        error: 'Validation error' 
+                    });
+                } else {
+                    res.statusCode = 500;
+                    
+                    return res.json({ 
+                        error: 'Server error' 
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+
 router.post('/', function(req, res) {
     console.log(req.query);
     var user = new User({
@@ -45,7 +85,7 @@ router.post('/', function(req, res) {
 
 router.get('/login', function(req, res){
     console.log(req.query);
-    User.find({username: req.query.username,hashedPassword: req.query.passwordg} ,function(err,users){
+    User.find({username: req.query.username,hashedPassword: req.query.password} ,function(err,users){
         if (!err) {
             return res.json(users);
         } else {

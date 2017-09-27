@@ -25,11 +25,29 @@ router.get('/',function(req, res) {
 	});
 });
 
+router.get('/myGames', function(req, res){
+    console.log(req.query);
+    Game.find({user: req.query.username} ,function(err,users){
+        if (!err) {
+            return res.json(users);
+        } else {
+            res.statusCode = 500;
+            
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            
+            return res.json({ 
+                error: 'Server error' 
+            });
+        }
+    })
+});
+
 router.post('/', function(req, res) {
 	
 	var game = new Game({
-		user1: req.query.user1,
-		user2: req.query.user2
+		user: req.query.user,
+		myTeamAverageRating: req.query.myTeamAverageRating,
+		otherAverageRating: req.query.otherAverageRating
 	});
 	
 	game.save(function (err) {

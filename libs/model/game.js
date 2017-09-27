@@ -3,8 +3,9 @@ var Schema = mongoose.Schema;
 
 
 var Game = new Schema({
-	user1: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-	user2: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	myTeamAverageRating : {type: Number, unique: false, required: true},
+	otherAverageRating : {type: Number, unique: false, required: true},
 	modified: { type: Date, default: Date.now }
 });
 
