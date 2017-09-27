@@ -37,10 +37,9 @@ router.put('/changeRating', function (req, res){
                         error: 'Validation error' 
                     });
                 } else {
-                    res.statusCode = 500;
                     
                     return res.json({ 
-                        error: 'Server error' 
+                        status: 'DUPLICATE KEY ERROR'
                     });
                 }
                 log.error('Internal error (%d): %s', res.statusCode, err.message);
@@ -122,5 +121,28 @@ router.get('/',
         });
     }
 );
+
+router.delete('/', function(req, res) {
+
+    User.find({}, function(err) {
+        if (!err) {
+            return res.send('all users deleted!');
+        } else {
+            return res.send('Error deleting user!');
+        }
+    }).remove().exec();
+
+});
+
+router.delete(':user_id', function(req, res) {
+    User.find({ id: req.query.user_id }, function(err) {
+        if (!err) {
+            return res.send('User deleted!');
+        } else {
+            return res.send('Error deleting user!');
+        }
+    }).remove().exec();
+
+});
 
 module.exports = router;
