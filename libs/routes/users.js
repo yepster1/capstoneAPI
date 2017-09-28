@@ -10,25 +10,24 @@ var db = require(libs + 'db/mongoose');
 var User = require(libs + 'model/user');
 
 router.put('/changeRating', function (req, res){
-    var userId = req.params.id;
 
-    User.findById(userId, function (err, user) {
+    User.find({username: req.query.username}, function (err, user) {
         if(!user) {
             res.statusCode = 404;
-            log.error('user with id: %s Not Found', gameId);
+            log.error('user with id: %s Not Found', req.query.username);
             return res.json({ 
                 error: 'Not found' 
             });
         }
 
-        user.rating = req.params.rating;
+        user.rating = req.query.rating;
         
-        game.save(function (err) {
+        user.save(function (err) {
             if (!err) {
-                log.info("user rating with id: %s updated", game.id);
+                log.info("user rating with id: %s updated", user.id);
                 return res.json({ 
                     status: 'OK', 
-                    game:game 
+                    user:user 
                 });
             } else {
                 if(err.name === 'ValidationError') {
@@ -101,7 +100,6 @@ router.get('/login', function(req, res){
 
 router.get('/',
     function(req, res) {
-        console.log("info");
         // req.authInfo is set using the `info` argument supplied by
         // `BearerStrategy`.  It is typically used to indicate scope of the token,
         // and used in access control checks.  For illustrative purposes, this

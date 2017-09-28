@@ -26,6 +26,15 @@ describe("post requests for users", function(){
 		})
   	});
 
+describe("put requests for users", function(){
+	it("changes users rating", function(done) {
+	    reqp.post('http://localhost:1337/api/users/?username=cary&hashedPassword=pass&salt=salted').then(function(res) {
+	      let result = toJson(res);
+	      assert.equal("OK", result.status);
+	      done();
+		})
+  	});
+
   // 	it("creates person that already exists", function(done) {
 	 //    reqp.post('http://localhost:1337/api/users/?username=cary&hashedPassword=pass&salt=salted').then(function(res,err) {
 	 //      if(err != null){
@@ -42,6 +51,14 @@ describe("post requests for users", function(){
 describe("get requests for users", function(){
 	it("gets all users", function(done) {
 	    reqp.get('http://localhost:1337/api/users').then(function(res) {
+	      let result = toJson(res);
+	      assert.equal("cary", result[0].username);
+	      done();
+		})
+  	});
+
+	it("checks if user with username and password exist", function(done) {
+	    reqp.get('http://localhost:1337/api/users/login?username=cary&password=pass').then(function(res) {
 	      let result = toJson(res);
 	      assert.equal("cary", result[0].username);
 	      done();
