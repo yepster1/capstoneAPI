@@ -10,7 +10,6 @@ var db = require(libs + 'db/mongoose');
 var User = require(libs + 'model/user');
 
 router.put('/changeRating', function (req, res){
-
     User.find({username: req.query.username}, function (err, user) {
         if(!user) {
             res.statusCode = 404;
@@ -19,7 +18,8 @@ router.put('/changeRating', function (req, res){
                 error: 'Not found' 
             });
         }
-
+        user = user[0];
+        console.log(user);
         user.rating = req.query.rating;
         
         user.save(function (err) {

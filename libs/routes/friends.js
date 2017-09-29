@@ -8,6 +8,32 @@ var log = require(libs + 'log')(module);
 var db = require(libs + 'db/mongoose');
 var Friend = require(libs + 'model/friend');
 
+router.delete('/:id', function (req, res){
+    var friendID = req.params.id;
+
+    Friend.findById(friendID, function (err, game) {
+        if(!game) {
+            res.statusCode = 404;
+            log.error('friend with id: %s Not Found', gameId);
+            return res.json({ 
+                error: 'Not found' 
+            });
+        }
+    }).remove().exec();
+});
+
+router.delete('/', function(req, res) {
+
+    Friend.find({}, function(err) {
+        if (!err) {
+            return res.send('all friends deleted!');
+        } else {
+            return res.send('Error deleting friends!');
+        }
+    }).remove().exec();
+
+});
+
 router.get('/',function(req, res) {
     
     Friend.find(function (err, friends) {
