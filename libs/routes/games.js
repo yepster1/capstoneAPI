@@ -8,32 +8,6 @@ var log = require(libs + 'log')(module);
 var db = require(libs + 'db/mongoose');
 var Game = require(libs + 'model/game');
 
-router.delete('/:id', function (req, res){
-	var gameId = req.params.id;
-
-	Game.findById(gameId, function (err, game) {
-		if(!game) {
-			res.statusCode = 404;
-			log.error('game with id: %s Not Found', gameId);
-			return res.json({ 
-				error: 'Not found' 
-			});
-		}
-	}).remove().exec();
-});
-
-router.delete('/', function(req, res) {
-
-    Game.find({}, function(err) {
-        if (!err) {
-            return res.send('all games deleted!');
-        } else {
-            return res.send('Error deleting games!');
-        }
-    }).remove().exec();
-
-});
-
 router.get('/',function(req, res) {
 	
 	Game.find(function (err, games) {
@@ -53,7 +27,7 @@ router.get('/',function(req, res) {
 
 router.get('/myGames', function(req, res){
     console.log(req.query);
-    Game.find({user: req.query.user} ,function(err,users){
+    Game.find({user: req.query.username} ,function(err,users){
         if (!err) {
             return res.json(users);
         } else {
@@ -69,11 +43,11 @@ router.get('/myGames', function(req, res){
 });
 
 router.post('/', function(req, res) {
-	console.log(req.query);
+	
 	var game = new Game({
 		user: req.query.user,
-		myTeamAverageRating: parseInt(req.query.myTeamAverageRating,10),
-		otherAverageRating: parseInt(req.query.otherAverageRating,10)
+		myTeamAverageRating: req.query.myTeamAverageRating,
+		otherAverageRating: req.query.otherAverageRating
 	});
 	
 	game.save(function (err) {
@@ -133,7 +107,7 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function (req, res){
 	var gameId = req.params.id;
 
-	Game.findById(gameId, function (err, game) {
+	game.findById(gameId, function (err, game) {
 		if(!game) {
 			res.statusCode = 404;
 			log.error('game with id: %s Not Found', gameId);
