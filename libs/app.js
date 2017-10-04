@@ -6,7 +6,6 @@ var passport = require('passport');
 var methodOverride = require('method-override');
 
 var libs = process.cwd() + '/libs/';
-require(libs + 'auth/auth');
 
 var config = require('./config');
 var log = require('./log')(module);
