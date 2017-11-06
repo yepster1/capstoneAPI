@@ -4,8 +4,9 @@ var libs = process.cwd() + '/libs/';
 
 var log = require(libs + 'log')(module);
 var config = require(libs + 'config');
+var dbURI = "mongodb://127.0.0.1:27017/loc8r";
 
-mongoose.connect(config.get('mongoose:uri'));
+mongoose.connect(dbURI);
 
 var db = mongoose.connection;
 
